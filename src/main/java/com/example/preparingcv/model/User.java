@@ -22,4 +22,7 @@ public class User {
     @OneToMany
     private List<UserAbout> userAbout;
 
+    @OneToMany
+    private List<Skill> skills;
+
 }
