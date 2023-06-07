@@ -34,17 +34,17 @@ public class EducationDto {
 
         }
 
-        public Builder withSchoolName(String schoolName) {
+        public Builder schoolName(String schoolName) {
             this.schoolName = schoolName;
             return this;
         }
 
-        public Builder withDegree(String degree) {
+        public Builder degree(String degree) {
             this.degree = degree;
             return this;
         }
 
-        public EducationDto builder() {
+        public EducationDto build() {
             return new EducationDto(this);
         }
 

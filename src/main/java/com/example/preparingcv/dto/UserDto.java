@@ -17,7 +17,7 @@ public class UserDto {
         return name;
     }
 
-    public void setName(String name) {
+    public void name(String name) {
         this.name = name;
     }
 
@@ -45,17 +45,17 @@ public class UserDto {
         private Builder() {
         }
 
-        public Builder withName(String name) {
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withSurname(String surName) {
+        public Builder surname(String surName) {
             this.surName = surName;
             return this;
         }
 
-        public Builder withEMail(String eMail) {
+        public Builder eMail(String eMail) {
             this.eMail = eMail;
             return this;
         }
