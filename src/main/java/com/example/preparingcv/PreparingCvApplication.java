@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PreparingCvApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PreparingCvApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PreparingCvApplication.class, args);
+    }
 
 }
