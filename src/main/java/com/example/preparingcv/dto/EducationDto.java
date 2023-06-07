@@ -4,6 +4,11 @@ public class EducationDto {
     private String schoolName;
     private String degree;
 
+    public EducationDto(Builder builder) {
+        this.degree = builder.degree;
+        this.schoolName = builder.schoolName;
+    }
+
     public String getSchoolName() {
         return schoolName;
     }
@@ -19,4 +24,37 @@ public class EducationDto {
     public void setDegree(String degree) {
         this.degree = degree;
     }
+
+
+    public static final class Builder {
+        private String schoolName;
+        private String degree;
+
+        public Builder() {
+
+        }
+
+        public Builder withSchoolName(String schoolName) {
+            this.schoolName = schoolName;
+            return this;
+        }
+
+        public Builder withDegree(String degree) {
+            this.degree = degree;
+            return this;
+        }
+
+        public EducationDto builder() {
+            return new EducationDto(this);
+        }
+
+
+    }
 }
+
+
+
+
+
+
+
