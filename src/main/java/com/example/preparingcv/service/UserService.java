@@ -23,13 +23,13 @@ public class UserService {
                 .build();
     }
 
-    public User findUserByName(String name) {
+    public User getUser(String name) {
         return userRepository.findByUserName(name).orElseThrow();
     }
 
     public User updateUser(Long id, User user) throws Exception {
         User updateUser = userRepository.findById(id)
-                .orElseThrow(()-> new Exception("not found"));
+                .orElseThrow(() -> new Exception("not found"));
 
         updateUser.setUserName(user.getUserName());
         updateUser.setUserSurname(user.getUserSurname());
@@ -37,8 +37,11 @@ public class UserService {
 
         return userRepository.save(updateUser);
 
-
     }
 
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+
+    }
 
 }
