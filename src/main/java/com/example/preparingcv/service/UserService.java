@@ -15,9 +15,13 @@ public class UserService {
     }
 
     public UserDto createUser(User user) {
-        return null;
+        User saveUser = userRepository.save(user);
 
-
+        return new UserDto.Builder()
+                .eMail(saveUser.geteMail())
+                .name(saveUser.getUserName())
+                .surname(saveUser.getUserName())
+                .build();
     }
 
 

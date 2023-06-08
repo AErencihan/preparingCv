@@ -42,7 +42,7 @@ public class UserDto {
         private String surName;
         private String eMail;
 
-        private Builder() {
+        public Builder() {
         }
 
         public Builder name(String name) {

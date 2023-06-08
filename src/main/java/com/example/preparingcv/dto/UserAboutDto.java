@@ -59,8 +59,9 @@ public class UserAboutDto {
             this.address = address;
             return this;
         }
-
-
+        public UserAboutDto build(){
+            return new UserAboutDto(this);
+        }
     }
 
 }
