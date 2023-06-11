@@ -64,6 +64,5 @@ public class UserDto {
             return new UserDto(this);
         }
 
-
     }
 }

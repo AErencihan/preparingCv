@@ -5,6 +5,8 @@ import com.example.preparingcv.model.UserAbout;
 import com.example.preparingcv.repository.UserAboutRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserAboutService {
 
@@ -14,7 +16,7 @@ public class UserAboutService {
         this.aboutRepository = aboutRepository;
     }
 
-    public UserAboutDto createUserAbout(UserAbout userAbout){
+    public UserAboutDto createUserAbout(UserAbout userAbout) {
         var saveUserAbout = aboutRepository.save(userAbout);
 
         return new UserAboutDto.Builder()
@@ -25,5 +27,32 @@ public class UserAboutService {
     }
 
 
+    public UserAboutDto updateUserAbout(UserAbout userAbout) {
+        aboutRepository.findById(userAbout.getUserAboutId())
+                .orElseThrow();
+
+        UserAbout saved = aboutRepository.save(userAbout);
+
+        return new UserAboutDto.Builder()
+                .phoneNumber(saved.getPhoneNumber())
+                .address(saved.getAddress())
+                .birthDay(saved.getBirthDay())
+                .build();
+    }
+
+    public void deleteUserAbout(Long userAboutId) {
+        boolean exists = aboutRepository.existsById(userAboutId);
+
+        Optional.of(exists).ifPresentOrElse(a-> aboutRepository.deleteById(userAboutId), ()->{
+            throw new RuntimeException();
+        });
+    }
 
 }
+
+
+
+
+
+
+

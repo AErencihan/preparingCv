@@ -5,6 +5,8 @@ import com.example.preparingcv.model.User;
 import com.example.preparingcv.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -27,21 +29,33 @@ public class UserService {
         return userRepository.findByUserName(name).orElseThrow();
     }
 
-    public User updateUser(Long id, User user) throws Exception {
-        User updateUser = userRepository.findById(id)
-                .orElseThrow(() -> new Exception("not found"));
+    public UserDto updateUser(User user) {
+        User existUser = userRepository.findById(user.getId()).orElseThrow();
 
-        updateUser.setUserName(user.getUserName());
-        updateUser.setUserSurname(user.getUserSurname());
-        updateUser.setUserAbout(user.getUserAbout());
+        User saved = userRepository.save(user);
 
-        return userRepository.save(updateUser);
-
+        return new UserDto.Builder()
+                .surname(saved.getUserSurname())
+                .name(saved.getUserName())
+                .eMail(saved.geteMail())
+                .build();
     }
 
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        boolean exists = userRepository.existsById(id);
+
+        Optional.of(exists).ifPresentOrElse(a -> userRepository.deleteById(id),()->{
+            throw new RuntimeException();
+        });
 
     }
 
 }
+
+
+
+
+
+
+
+
