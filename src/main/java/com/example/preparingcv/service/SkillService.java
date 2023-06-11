@@ -24,6 +24,10 @@ public class SkillService {
                 .build();
     }
 
+    public Skill getSkill(Long skillId){
+        return skillsRepository.findById(skillId).orElseThrow();
+    }
+
     public SkillsDto updateSkill(Skill skill) {
         skillsRepository.findById(skill.getSkillsId()).orElseThrow();
 

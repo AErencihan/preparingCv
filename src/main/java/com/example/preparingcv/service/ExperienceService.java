@@ -27,6 +27,9 @@ public class ExperienceService {
                 .build();
     }
 
+    public Experience getExperience(Long experienceId){
+        return experienceRepository.findById(experienceId).orElseThrow();
+    }
 
     public ExperienceDto updateExperience(Experience experience) {
         experienceRepository.findById(experience.getExperienceId())

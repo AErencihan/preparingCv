@@ -26,6 +26,10 @@ public class UserAboutService {
                 .build();
     }
 
+    public UserAbout getUserAbout(Long userAboutId){
+        return aboutRepository.findById(userAboutId).orElseThrow();
+    }
+
 
     public UserAboutDto updateUserAbout(UserAbout userAbout) {
         aboutRepository.findById(userAbout.getUserAboutId())

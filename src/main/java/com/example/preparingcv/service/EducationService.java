@@ -25,6 +25,10 @@ public class EducationService {
                 .build();
     }
 
+    public Education getEducation(Long educationId) {
+        return educationRepository.findById(educationId).orElseThrow();
+    }
+
     public EducationDto updateEducation(Education education) {
         educationRepository.findById(education.getEducationId())
                 .orElseThrow();
@@ -40,7 +44,7 @@ public class EducationService {
     public void deleteEducation(Long educationId) {
         boolean exists = educationRepository.existsById(educationId);
 
-        Optional.of(exists).ifPresentOrElse(a-> educationRepository.deleteById(educationId), ()->{
+        Optional.of(exists).ifPresentOrElse(a -> educationRepository.deleteById(educationId), () -> {
             throw new RuntimeException();
         });
     }
