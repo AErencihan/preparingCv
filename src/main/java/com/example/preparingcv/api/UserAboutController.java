@@ -1,0 +1,43 @@
+package com.example.preparingcv.api;
+
+import com.example.preparingcv.dto.UserAboutDto;
+import com.example.preparingcv.model.UserAbout;
+import com.example.preparingcv.service.UserAboutService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RequestMapping("/api/userAbout")
+@RestController
+public class UserAboutController {
+    private final UserAboutService userAboutService;
+
+    public UserAboutController(UserAboutService userAboutService) {
+        this.userAboutService = userAboutService;
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<UserAboutDto> saveUserAbout(@RequestBody UserAbout userAbout){
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userAboutService.createUserAbout(userAbout));
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteUserAbout(Long userAboutId){
+        userAboutService.deleteUserAbout(userAboutId);
+    }
+
+    @PutMapping("/update")
+    public UserAboutDto updateUserAbout(@RequestBody UserAbout userAbout){
+        return userAboutService.updateUserAbout(userAbout);
+
+    }
+
+    @GetMapping("/get/{userAboutId}")
+    public UserAbout getUserAbout(@PathVariable Long userAboutId){
+        return userAboutService.getUserAbout(userAboutId);
+    }
+
+
+}

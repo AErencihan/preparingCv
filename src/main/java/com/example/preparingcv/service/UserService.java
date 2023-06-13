@@ -1,8 +1,10 @@
 package com.example.preparingcv.service;
 
 import com.example.preparingcv.dto.UserDto;
+import com.example.preparingcv.exception.GenericException;
 import com.example.preparingcv.model.User;
 import com.example.preparingcv.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,11 +28,17 @@ public class UserService {
     }
 
     public User getUser(String name) {
-        return userRepository.findByUserName(name).orElseThrow();
+        return userRepository.findByUserName(name).orElseThrow(()-> new GenericException.Builder()
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .message("User name Not found")
+                .build());
     }
 
     public UserDto updateUser(User user) {
-        User existUser = userRepository.findById(user.getId()).orElseThrow();
+        User existUser = userRepository.findById(user.getId()).orElseThrow(()-> new GenericException.Builder()
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .message("User not Found")
+                .build());
 
         User saved = userRepository.save(user);
 
@@ -45,7 +53,10 @@ public class UserService {
         boolean exists = userRepository.existsById(id);
 
         Optional.of(exists).ifPresentOrElse(a -> userRepository.deleteById(id),()->{
-            throw new RuntimeException();
+            new GenericException.Builder()
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .message("no user for delete")
+                    .build();
         });
 
     }

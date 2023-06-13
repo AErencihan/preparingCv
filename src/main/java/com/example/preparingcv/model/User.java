@@ -3,7 +3,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -12,6 +12,17 @@ public class User {
     private String userName;
     private String userSurname;
     private String eMail;
+    @OneToMany(mappedBy = "user")
+    private List<Experience> experience;
+
+    @OneToMany(mappedBy = "user")
+    private List<Education> education;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserAbout> userAbout;
+
+    @OneToMany(mappedBy = "user")
+    private List<Skill> skills;
 
     public Long getId() {
         return id;
@@ -77,16 +88,6 @@ public class User {
         this.skills = skills;
     }
 
-    @OneToMany
-    private List<Experience> experience;
 
-    @OneToMany
-    private List<Education> education;
-
-    @OneToMany
-    private List<UserAbout> userAbout;
-
-    @OneToMany
-    private List<Skill> skills;
 
 }

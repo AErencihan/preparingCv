@@ -1,8 +1,10 @@
 package com.example.preparingcv.service;
 
 import com.example.preparingcv.dto.UserAboutDto;
+import com.example.preparingcv.exception.GenericException;
 import com.example.preparingcv.model.UserAbout;
 import com.example.preparingcv.repository.UserAboutRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,13 +29,19 @@ public class UserAboutService {
     }
 
     public UserAbout getUserAbout(Long userAboutId){
-        return aboutRepository.findById(userAboutId).orElseThrow();
+        return aboutRepository.findById(userAboutId).orElseThrow(()-> new GenericException.Builder()
+                .message("no information about the user")
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .build());
     }
 
 
     public UserAboutDto updateUserAbout(UserAbout userAbout) {
         aboutRepository.findById(userAbout.getUserAboutId())
-                .orElseThrow();
+                .orElseThrow(()-> new GenericException.Builder()
+                        .httpStatus(HttpStatus.NOT_FOUND)
+                        .message("no information for update")
+                        .build());
 
         UserAbout saved = aboutRepository.save(userAbout);
 
@@ -48,7 +56,10 @@ public class UserAboutService {
         boolean exists = aboutRepository.existsById(userAboutId);
 
         Optional.of(exists).ifPresentOrElse(a-> aboutRepository.deleteById(userAboutId), ()->{
-            throw new RuntimeException();
+            new GenericException.Builder()
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .message("No userAbout for delete")
+                    .build();
         });
     }
 

@@ -1,8 +1,10 @@
 package com.example.preparingcv.service;
 
 import com.example.preparingcv.dto.ExperienceDto;
+import com.example.preparingcv.exception.GenericException;
 import com.example.preparingcv.model.Experience;
 import com.example.preparingcv.repository.ExperienceRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,12 +30,18 @@ public class ExperienceService {
     }
 
     public Experience getExperience(Long experienceId){
-        return experienceRepository.findById(experienceId).orElseThrow();
+        return experienceRepository.findById(experienceId).orElseThrow(()-> new GenericException.Builder()
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .message("no information about the Experience")
+                .build());
     }
 
     public ExperienceDto updateExperience(Experience experience) {
         experienceRepository.findById(experience.getExperienceId())
-                .orElseThrow();
+                .orElseThrow(()-> new GenericException.Builder()
+                        .httpStatus(HttpStatus.NOT_FOUND)
+                        .message("no information for update")
+                        .build());
 
         Experience saved = experienceRepository.save(experience);
 
@@ -49,7 +57,10 @@ public class ExperienceService {
         boolean exists = experienceRepository.existsById(experienceId);
 
         Optional.of(exists).ifPresentOrElse(a-> experienceRepository.deleteById(experienceId), ()->{
-            throw new RuntimeException();
+            new GenericException.Builder()
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .message("No Experience for delete")
+                    .build();
         });
 
     }

@@ -1,0 +1,75 @@
+1- MVC kavramını açıklar mısınız ? Neden ihtiyaç duyuluyor. Java’da nasıl kurgulanıyor.
+Object Oriented katmanları nelerdir ?
+- Model, View ve Controller olarak üçe ayrılır temel amacı uygulamanın daha kolay yönetilebilmesini sağlamaktır.
+Model kısmın veritabanı ile etkileşimin bulunduğu kısımdar. View katmanı kullanıcıya sunulan görsel kısmın bulunduğu
+yerdir. Controller kısmı ise view'dan gelen istekler ile model arasında bir bağlantı kurarak gerekli iş kurallarını
+yerine getirir.
+Java’da ise bu işlemler için servletler kullanılır.
+OOP katmanları : Encapsulation, Abstraction, Inheritance ve Polymorphism'dir.
+
+2-Birbirinden bağımsız iki platformun birbiriyle haberleşmesi nasıl sağlanabilir. Örneğin, X
+platformu Java ile yazılmış olsun, Y platform u C# ile. Bu iki platformun bir biri ile iletişim
+halinde request-response ilişkisi kurması gerekiyor. Bu yapıyı nasıl sağlarız.
+- Resful service'ler ve Message Queue'lar ile iletişim kurulabilir.
+
+3-Bir web sayfasında ekran sürekli Backend’ den veya bir başka yapı tarafından
+güncelleniyor. Siz, web sayfasını refresh etmeden bu güncel bilgiyi anlık ekrana nasıl
+yansıtırsınız
+- websocket kullanılabilir. Websocket ile bir bağlantı kurulur ve bu bağlantı üzerinden
+istenilen verilerin anlık olarak gönderilmesi sağlanır. Buna ek olarak AJAX'da kullanılabilri.
+
+4-Bir for döngüsü ile aşağıdaki çıktıyı yazar mısınız.
+*
+**
+****
+******
+********
+**********
+-     public static void main(String[] args) {
+          StringBuilder star = new StringBuilder();
+
+          for (int i = 1; i <= 6; i++) {
+              if (i == 1) {
+                  System.out.println("*");
+              } else {
+                  System.out.println(star.append("**"));
+              }
+          }
+      }
+
+5- Firmada çalışman için sana remote bir linux server verildi. Elinde ip adresi port bilgisi
+kullanıcı adi ve şifren var. Server a erişimi nasıl test edersin, Server a nasıl erişirsin, Server a
+nasıl dosya atarsın, Serverdan nasıl dosya çekersin.
+- SSH veya filezilla gibi dosya transfer araçları ile erişilebilir. Erişim testini ise bir paket yollarım geri dönüş
+alabiliyorsam testi sağlarım. Dosya atma ve çekme işlemleri için scp kullanırım.
+
+
+7- Apache Solr servisine yazılacak bir query örneği Apache Solr kullanılan sql
+programlarından daha farklı runtime bir database. Solr a hali hazırda kayıtlı bir alan olduğunu
+düşünelim. Alanın ismi “updatedAt” long tipinde tutulan bir alan. Ben 2020 Ocak ayından
+sonraki verileri getir dediğimde solr a nasıl bir query yazılmalı. http://example?query=
+kısmını nasıl doldurmalıyım?
+- fq=updatedAt:[2020-01-01T00:00:00Z TO *]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
