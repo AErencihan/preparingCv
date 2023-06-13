@@ -1,6 +1,7 @@
 package com.example.preparingcv.api;
 
 import com.example.preparingcv.dto.UserAboutDto;
+import com.example.preparingcv.dto.request.UserAboutRequest;
 import com.example.preparingcv.model.UserAbout;
 import com.example.preparingcv.service.UserAboutService;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,10 @@ public class UserAboutController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<UserAboutDto> saveUserAbout(@RequestBody UserAbout userAbout){
+    public ResponseEntity<UserAboutDto> saveUserAbout(@RequestBody UserAboutRequest userAbout){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userAboutService.createUserAbout(userAbout));
+                .body(userAboutService.createOrUpdateUserAbout(userAbout));
     }
 
     @DeleteMapping("/delete")
@@ -29,8 +30,8 @@ public class UserAboutController {
     }
 
     @PutMapping("/update")
-    public UserAboutDto updateUserAbout(@RequestBody UserAbout userAbout){
-        return userAboutService.updateUserAbout(userAbout);
+    public UserAboutDto updateUserAbout(@RequestBody UserAboutRequest userAbout){
+        return userAboutService.createOrUpdateUserAbout(userAbout);
 
     }
 

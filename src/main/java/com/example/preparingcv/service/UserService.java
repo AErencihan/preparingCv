@@ -21,7 +21,7 @@ public class UserService {
     public UserDto createUser(User user) {
         User saveUser = userRepository.save(user);
         return new UserDto.Builder()
-                .eMail(saveUser.geteMail())
+                .email(saveUser.getEmail())
                 .name(saveUser.getUserName())
                 .surname(saveUser.getUserName())
                 .build();
@@ -45,7 +45,7 @@ public class UserService {
         return new UserDto.Builder()
                 .surname(saved.getUserSurname())
                 .name(saved.getUserName())
-                .eMail(saved.geteMail())
+                .email(saved.getEmail())
                 .build();
     }
 

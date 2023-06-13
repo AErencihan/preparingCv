@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+    db:
+        image: postgres
+        container_name: postgres
+        environment:
+            POSTGRES_DB: cvdb
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./postgres-data:/var/lib/postgresql/data
+
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: spring-app
+        restart: always
+        ports:
+            - "8083:8083"
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/cvdb?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+            SPRING_DATASOURCE_USERNAME: postgres
+            SPRING_DATASOURCE_PASSWORD: postgres
+            SPRING_JPA_DATABASE-PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+            SPRING_JPA_HIBERNATE_DDL-AUTO: update
+            SERVER_PORT: 8083
+        depends_on:
+            - db

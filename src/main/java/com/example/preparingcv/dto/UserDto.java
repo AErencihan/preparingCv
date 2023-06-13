@@ -5,12 +5,12 @@ public class UserDto {
 
     private String name;
     private String surName;
-    private String eMail;
+    private String email;
 
     public UserDto(Builder builder) {
         this.name = builder.name;
         this.surName = builder.surName;
-        this.eMail = builder.eMail;
+        this.email = builder.email;
     }
 
     public String getName() {
@@ -29,18 +29,18 @@ public class UserDto {
         this.surName = surName;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String getEmail() {
+        return email;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public static final class Builder {
         private String name;
         private String surName;
-        private String eMail;
+        private String email;
 
         public Builder() {
         }
@@ -55,8 +55,8 @@ public class UserDto {
             return this;
         }
 
-        public Builder eMail(String eMail) {
-            this.eMail = eMail;
+        public Builder email(String email) {
+            this.email = email;
             return this;
         }
 

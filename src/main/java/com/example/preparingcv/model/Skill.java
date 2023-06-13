@@ -16,6 +16,14 @@ public class Skill {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Skill(String skillName, User user) {
+        this.skillName = skillName;
+        this.user = user;
+    }
+
+    public Skill() {
+    }
+
     public Long getSkillsId() {
         return skillsId;
     }

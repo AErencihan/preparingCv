@@ -1,9 +1,11 @@
 package com.example.preparingcv.service;
 
 import com.example.preparingcv.dto.EducationDto;
+import com.example.preparingcv.dto.request.EducationRequest;
 import com.example.preparingcv.exception.GenericException;
 import com.example.preparingcv.model.Education;
 import com.example.preparingcv.repository.EducationRepository;
+import com.example.preparingcv.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +15,23 @@ import java.util.Optional;
 public class EducationService {
 
     private final EducationRepository educationRepository;
+    private final UserRepository userRepository;
 
-    public EducationService(EducationRepository educationRepository) {
+    public EducationService(EducationRepository educationRepository, UserRepository userRepository) {
         this.educationRepository = educationRepository;
+        this.userRepository = userRepository;
     }
 
-    public EducationDto createEducation(Education education) {
-        var saveEducation = educationRepository.save(education);
+    public EducationDto createEducation(EducationRequest education) {
+        var user = userRepository.findById(education.getUserId())
+                .orElseThrow(() -> new GenericException.Builder()
+                        .httpStatus(HttpStatus.NOT_FOUND)
+                        .message("no information about the user")
+                        .build());
+
+        Education newEducation = new Education(user, education.getSchoolName(), education.getDegree());
+
+        var saveEducation = educationRepository.save(newEducation);
 
         return new EducationDto.Builder()
                 .degree(saveEducation.getDegree())
@@ -34,17 +46,23 @@ public class EducationService {
                 .build());
     }
 
-    public EducationDto updateEducation(Education education) {
-        educationRepository.findById(education.getEducationId())
-                .orElseThrow(()-> new GenericException.Builder()
+    public EducationDto updateEducation(EducationRequest education) {
+        var savedEducation = education.getEducationId();
+
+        var educationUpdate = educationRepository.findById(savedEducation)
+                .orElseThrow(() -> new GenericException.Builder()
                         .httpStatus(HttpStatus.NOT_FOUND)
-                        .message("no information for update")
+                        .message("no information about the user")
                         .build());
 
-        Education saved = educationRepository.save(education);
+        educationUpdate.setDegree(education.getDegree());
+        educationUpdate.setSchoolName(education.getSchoolName());
+
+        var saveEducation = educationRepository.save(educationUpdate);
+
         return new EducationDto.Builder()
-                .schoolName(saved.getSchoolName())
-                .degree(saved.getDegree())
+                .degree(saveEducation.getDegree())
+                .schoolName(saveEducation.getSchoolName())
                 .build();
     }
 

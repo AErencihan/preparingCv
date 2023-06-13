@@ -1,6 +1,7 @@
 package com.example.preparingcv.api;
 
 import com.example.preparingcv.dto.SkillsDto;
+import com.example.preparingcv.dto.request.SkillRequest;
 import com.example.preparingcv.model.Skill;
 import com.example.preparingcv.service.SkillService;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class SkillController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<SkillsDto> saveSkill(@RequestBody Skill skill){
+    public ResponseEntity<SkillsDto> saveSkill(@RequestBody SkillRequest skill){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(skillService.createSkill(skill));
@@ -29,7 +30,7 @@ public class SkillController {
     }
 
     @PutMapping("/update")
-    public SkillsDto updateSkill(@RequestBody Skill skill){
+    public SkillsDto updateSkill(@RequestBody SkillRequest skill){
         return skillService.updateSkill(skill);
     }
 
