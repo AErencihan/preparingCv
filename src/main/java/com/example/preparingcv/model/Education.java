@@ -16,6 +16,15 @@ public class Education {
     private String schoolName;
     private String degree;
 
+    public Education(User user, String schoolName, String degree) {
+        this.user = user;
+        this.schoolName = schoolName;
+        this.degree = degree;
+    }
+
+    public Education() {
+    }
+
     public Long getEducationId() {
         return educationId;
     }

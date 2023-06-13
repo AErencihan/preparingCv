@@ -1,31 +1,21 @@
-package com.example.preparingcv.model;
+package com.example.preparingcv.dto.request;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "user_about")
-public class UserAbout {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserAboutRequest {
     private Long userAboutId;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     private String birthDay;
     private String phoneNumber;
     private String address;
+    private Long userId;
 
-
-    public UserAbout(User user, String birthDay, String phoneNumber, String address) {
-        this.user = user;
+    public UserAboutRequest(Long userAboutId, String birthDay, String phoneNumber, String address, Long userId) {
+        this.userAboutId = userAboutId;
         this.birthDay = birthDay;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.userId = userId;
     }
 
-    public UserAbout() {
+    public UserAboutRequest() {
     }
 
     public Long getUserAboutId() {
@@ -34,14 +24,6 @@ public class UserAbout {
 
     public void setUserAboutId(Long userAboutId) {
         this.userAboutId = userAboutId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getBirthDay() {
@@ -66,5 +48,13 @@ public class UserAbout {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

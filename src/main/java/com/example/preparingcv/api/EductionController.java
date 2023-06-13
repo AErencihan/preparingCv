@@ -1,6 +1,7 @@
 package com.example.preparingcv.api;
 
 import com.example.preparingcv.dto.EducationDto;
+import com.example.preparingcv.dto.request.EducationRequest;
 import com.example.preparingcv.model.Education;
 import com.example.preparingcv.service.EducationService;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class EductionController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<EducationDto> saveEducation(@RequestBody Education education) {
+    public ResponseEntity<EducationDto> saveEducation(@RequestBody EducationRequest education) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(educationService.createEducation(education));
@@ -29,7 +30,7 @@ public class EductionController {
     }
 
     @PutMapping("/update")
-    public EducationDto updateEducation(@RequestBody Education education) {
+    public EducationDto updateEducation(@RequestBody EducationRequest education) {
         return educationService.updateEducation(education);
     }
 

@@ -1,9 +1,11 @@
 package com.example.preparingcv.service;
 
 import com.example.preparingcv.dto.ExperienceDto;
+import com.example.preparingcv.dto.request.ExperienceRequest;
 import com.example.preparingcv.exception.GenericException;
 import com.example.preparingcv.model.Experience;
 import com.example.preparingcv.repository.ExperienceRepository;
+import com.example.preparingcv.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -13,55 +15,75 @@ import java.util.Optional;
 public class ExperienceService {
 
     private final ExperienceRepository experienceRepository;
+    private final UserRepository userRepository;
 
-    public ExperienceService(ExperienceRepository experienceRepository) {
+    public ExperienceService(ExperienceRepository experienceRepository, UserRepository userRepository) {
         this.experienceRepository = experienceRepository;
+        this.userRepository = userRepository;
     }
 
-    public ExperienceDto createExperience(Experience experience) {
-        var saveExperience = experienceRepository.save(experience);
+    public ExperienceDto createExperience(ExperienceRequest experience) {
+
+        userRepository.findById(experience.getUserId())
+                .orElseThrow(() -> new GenericException.Builder()
+                        .httpStatus(HttpStatus.NOT_FOUND)
+                        .message("No User for create Experience")
+                        .build());
+
+        Experience saved = experienceRepository.save(new Experience(
+                userRepository.findById(experience.getUserId()).orElseThrow(() -> new GenericException.Builder()
+                        .httpStatus(HttpStatus.NOT_FOUND)
+                        .message("No User for create Experience")
+                        .build()),
+                experience.getCompanyName(),
+                experience.getPosition(),
+                experience.getStartDate(),
+                experience.getEndDate()
+        ));
 
         return new ExperienceDto.Builder()
-                .companyName(saveExperience.getCompanyName())
-                .position(experience.getPosition())
-                .startDate(experience.getStartDate())
-                .endDate(experience.getEndDate())
+                .companyName(saved.getCompanyName())
+                .position(saved.getPosition())
+                .startDate(saved.getStartDate())
+                .endDate(saved.getEndDate())
                 .build();
     }
 
-    public Experience getExperience(Long experienceId){
-        return experienceRepository.findById(experienceId).orElseThrow(()-> new GenericException.Builder()
+    public Experience getExperience(Long experienceId) {
+        return experienceRepository.findById(experienceId).orElseThrow(() -> new GenericException.Builder()
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .message("no information about the Experience")
                 .build());
     }
 
-    public ExperienceDto updateExperience(Experience experience) {
-        experienceRepository.findById(experience.getExperienceId())
-                .orElseThrow(()-> new GenericException.Builder()
-                        .httpStatus(HttpStatus.NOT_FOUND)
-                        .message("no information for update")
-                        .build());
+    public ExperienceDto updateExperience(ExperienceRequest experience) {
+        Experience experience1 = experienceRepository.findById(experience.getExperienceId()).orElseThrow(() -> new GenericException.Builder()
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .message("No Experience for update")
+                .build());
 
-        Experience saved = experienceRepository.save(experience);
+        experience1.setCompanyName(experience.getCompanyName());
+        experience1.setPosition(experience.getPosition());
+        experience1.setStartDate(experience.getStartDate());
+        experience1.setEndDate(experience.getEndDate());
+
+        Experience saved = experienceRepository.save(experience1);
 
         return new ExperienceDto.Builder()
-                .endDate(saved.getEndDate())
-                .startDate(saved.getStartDate())
-                .position(saved.getPosition())
                 .companyName(saved.getCompanyName())
+                .position(saved.getPosition())
+                .startDate(saved.getStartDate())
+                .endDate(saved.getEndDate())
                 .build();
     }
 
     public void deleteExperience(Long experienceId) {
         boolean exists = experienceRepository.existsById(experienceId);
 
-        Optional.of(exists).ifPresentOrElse(a-> experienceRepository.deleteById(experienceId), ()->{
-            new GenericException.Builder()
-                    .httpStatus(HttpStatus.NOT_FOUND)
-                    .message("No Experience for delete")
-                    .build();
-        });
+        Optional.of(exists).ifPresentOrElse(a -> experienceRepository.deleteById(experienceId), () -> new GenericException.Builder()
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .message("No Experience for delete")
+                .build());
 
     }
 

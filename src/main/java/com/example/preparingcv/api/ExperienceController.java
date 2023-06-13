@@ -1,6 +1,7 @@
 package com.example.preparingcv.api;
 
 import com.example.preparingcv.dto.ExperienceDto;
+import com.example.preparingcv.dto.request.ExperienceRequest;
 import com.example.preparingcv.model.Experience;
 import com.example.preparingcv.service.ExperienceService;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class ExperienceController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ExperienceDto> saveExperience(@RequestBody Experience experience){
+    public ResponseEntity<ExperienceDto> saveExperience(@RequestBody ExperienceRequest experience){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(experienceService.createExperience(experience));
@@ -28,7 +29,7 @@ public class ExperienceController {
         experienceService.deleteExperience(experienceId);
     }
     @PutMapping("/update")
-    public ExperienceDto updateExperience(@RequestBody Experience experience){
+    public ExperienceDto updateExperience(@RequestBody ExperienceRequest experience){
         return experienceService.updateExperience(experience);
     }
 

@@ -18,6 +18,18 @@ public class Experience {
     private String startDate;
     private String endDate;
 
+
+    public Experience(User user, String companyName, String position, String startDate, String endDate) {
+        this.user = user;
+        this.companyName = companyName;
+        this.position = position;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public Experience() {
+    }
+
     public Long getExperienceId() {
         return experienceId;
     }

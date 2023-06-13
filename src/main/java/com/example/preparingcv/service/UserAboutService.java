@@ -1,9 +1,11 @@
 package com.example.preparingcv.service;
 
 import com.example.preparingcv.dto.UserAboutDto;
+import com.example.preparingcv.dto.request.UserAboutRequest;
 import com.example.preparingcv.exception.GenericException;
 import com.example.preparingcv.model.UserAbout;
 import com.example.preparingcv.repository.UserAboutRepository;
+import com.example.preparingcv.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +15,31 @@ import java.util.Optional;
 public class UserAboutService {
 
     private final UserAboutRepository aboutRepository;
+    private final UserRepository userRepository;
 
-    public UserAboutService(UserAboutRepository aboutRepository) {
+    public UserAboutService(UserAboutRepository aboutRepository, UserRepository userRepository) {
         this.aboutRepository = aboutRepository;
+        this.userRepository = userRepository;
     }
 
-    public UserAboutDto createUserAbout(UserAbout userAbout) {
-        var saveUserAbout = aboutRepository.save(userAbout);
+    public UserAboutDto createOrUpdateUserAbout(UserAboutRequest userAbout) {
+        var user = userRepository.findById(userAbout.getUserId())
+                .orElseThrow(() -> new GenericException.Builder()
+                        .message("user not found")
+                        .httpStatus(HttpStatus.NOT_FOUND)
+                        .build());
+
+        UserAbout saved = aboutRepository.save(new UserAbout(
+                user,
+                userAbout.getBirthDay(),
+                userAbout.getPhoneNumber(),
+                userAbout.getAddress()
+        ));
 
         return new UserAboutDto.Builder()
-                .address(saveUserAbout.getAddress())
-                .birthDay(saveUserAbout.getBirthDay())
-                .phoneNumber(saveUserAbout.getPhoneNumber())
+                .phoneNumber(saved.getPhoneNumber())
+                .address(saved.getAddress())
+                .birthDay(saved.getBirthDay())
                 .build();
     }
 
@@ -33,23 +48,6 @@ public class UserAboutService {
                 .message("no information about the user")
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .build());
-    }
-
-
-    public UserAboutDto updateUserAbout(UserAbout userAbout) {
-        aboutRepository.findById(userAbout.getUserAboutId())
-                .orElseThrow(()-> new GenericException.Builder()
-                        .httpStatus(HttpStatus.NOT_FOUND)
-                        .message("no information for update")
-                        .build());
-
-        UserAbout saved = aboutRepository.save(userAbout);
-
-        return new UserAboutDto.Builder()
-                .phoneNumber(saved.getPhoneNumber())
-                .address(saved.getAddress())
-                .birthDay(saved.getBirthDay())
-                .build();
     }
 
     public void deleteUserAbout(Long userAboutId) {

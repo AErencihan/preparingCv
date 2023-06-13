@@ -12,10 +12,10 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("NOTIFICATION API")
+                .info(new Info().title("CV API")
                         .version("1.0")
-                        .description("NOTIFICATION")
-                        .license(new License().name("NOTIFICATION API LICENCE")));
+                        .description("CASE ENOCA")
+                        .license(new License().name("CV API LICENCE")));
     }
 
 }

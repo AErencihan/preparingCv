@@ -1,4 +1,6 @@
 package com.example.preparingcv.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,17 +13,21 @@ public class User {
     private Long id;
     private String userName;
     private String userSurname;
-    private String eMail;
+    private String email;
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Experience> experience;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Education> education;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<UserAbout> userAbout;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Skill> skills;
 
     public Long getId() {
@@ -48,12 +54,13 @@ public class User {
         this.userSurname = userSurname;
     }
 
-    public String geteMail() {
-        return eMail;
+
+    public String getEmail() {
+        return email;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Experience> getExperience() {
