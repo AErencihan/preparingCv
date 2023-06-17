@@ -66,12 +66,13 @@ public class SkillService {
     public void deleteSkill(Long skillId) {
         boolean exists = skillsRepository.existsById(skillId);
 
-        Optional.of(exists).ifPresentOrElse(a-> skillsRepository.deleteById(skillId), ()->{
-            new GenericException.Builder()
-                    .message("No found skill for delete")
+        if (!exists){
+            throw new GenericException.Builder()
+                    .message("No user Delete was found")
                     .httpStatus(HttpStatus.NOT_FOUND)
                     .build();
-        });
+        }
+        skillsRepository.deleteById(skillId);
     }
 }
 

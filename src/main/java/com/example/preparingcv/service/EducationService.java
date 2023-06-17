@@ -26,7 +26,7 @@ public class EducationService {
         var user = userRepository.findById(education.getUserId())
                 .orElseThrow(() -> new GenericException.Builder()
                         .httpStatus(HttpStatus.NOT_FOUND)
-                        .message("no information about the user")
+                        .message("Not found User ")
                         .build());
 
         Education newEducation = new Education(user, education.getSchoolName(), education.getDegree());
@@ -70,11 +70,12 @@ public class EducationService {
     public void deleteEducation(Long educationId) {
         boolean exists = educationRepository.existsById(educationId);
 
-        Optional.of(exists).ifPresentOrElse(a -> educationRepository.deleteById(educationId), () -> {
-            new GenericException.Builder()
+        if (!exists) {
+            throw new GenericException.Builder()
                     .httpStatus(HttpStatus.NOT_FOUND)
-                    .message("No userAbout for delete")
+                    .message("No user Delete was found")
                     .build();
-        });
+        }
+        educationRepository.deleteById(educationId);
     }
 }

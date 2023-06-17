@@ -24,8 +24,8 @@ public class UserAboutController {
                 .body(userAboutService.createOrUpdateUserAbout(userAbout));
     }
 
-    @DeleteMapping("/delete")
-    public void deleteUserAbout(Long userAboutId){
+    @DeleteMapping("/delete/{userAboutId}")
+    public void deleteUserAbout(@PathVariable Long userAboutId){
         userAboutService.deleteUserAbout(userAboutId);
     }
 

@@ -43,8 +43,8 @@ public class UserAboutService {
                 .build();
     }
 
-    public UserAbout getUserAbout(Long userAboutId){
-        return aboutRepository.findById(userAboutId).orElseThrow(()-> new GenericException.Builder()
+    public UserAbout getUserAbout(Long userAboutId) {
+        return aboutRepository.findById(userAboutId).orElseThrow(() -> new GenericException.Builder()
                 .message("no information about the user")
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .build());
@@ -53,12 +53,13 @@ public class UserAboutService {
     public void deleteUserAbout(Long userAboutId) {
         boolean exists = aboutRepository.existsById(userAboutId);
 
-        Optional.of(exists).ifPresentOrElse(a-> aboutRepository.deleteById(userAboutId), ()->{
-            new GenericException.Builder()
+        if (!exists) {
+            throw new GenericException.Builder()
+                    .message("No user Delete was found")
                     .httpStatus(HttpStatus.NOT_FOUND)
-                    .message("No userAbout for delete")
                     .build();
-        });
+        }
+        userRepository.deleteById(userAboutId);
     }
 
 }

@@ -16,7 +16,7 @@ halinde request-response ilişkisi kurması gerekiyor. Bu yapıyı nasıl sağla
 güncelleniyor. Siz, web sayfasını refresh etmeden bu güncel bilgiyi anlık ekrana nasıl
 yansıtırsınız
 - websocket kullanılabilir. Websocket ile bir bağlantı kurulur ve bu bağlantı üzerinden
-istenilen verilerin anlık olarak gönderilmesi sağlanır. Buna ek olarak AJAX'da kullanılabilri.
+istenilen verilerin anlık olarak gönderilmesi sağlanır. Buna ek olarak AJAX'da kullanılabilir.
 
 4-Bir for döngüsü ile aşağıdaki çıktıyı yazar mısınız.
 *

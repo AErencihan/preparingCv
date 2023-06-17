@@ -80,11 +80,13 @@ public class ExperienceService {
     public void deleteExperience(Long experienceId) {
         boolean exists = experienceRepository.existsById(experienceId);
 
-        Optional.of(exists).ifPresentOrElse(a -> experienceRepository.deleteById(experienceId), () -> new GenericException.Builder()
-                .httpStatus(HttpStatus.NOT_FOUND)
-                .message("No Experience for delete")
-                .build());
-
+        if (!exists) {
+            throw new GenericException.Builder()
+                    .message("No user Delete was found")
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .build();
+        }
+        experienceRepository.deleteById(experienceId);
     }
 
 }

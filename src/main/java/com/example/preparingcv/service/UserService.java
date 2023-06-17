@@ -28,18 +28,21 @@ public class UserService {
     }
 
     public User getUser(String name) {
-        return userRepository.findByUserName(name).orElseThrow(()-> new GenericException.Builder()
+        return userRepository.findByUserName(name).orElseThrow(() -> new GenericException.Builder()
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .message("User name Not found")
                 .build());
     }
 
     public UserDto updateUser(User user) {
-        User existUser = userRepository.findById(user.getId()).orElseThrow(()-> new GenericException.Builder()
-                .httpStatus(HttpStatus.NOT_FOUND)
-                .message("User not Found")
-                .build());
+        Optional<User> userOptional = userRepository.findById(user.getId());
 
+        if (userOptional.isEmpty()) {
+            throw new GenericException.Builder()
+                    .message("No user found")
+                    .httpStatus(HttpStatus.NOT_FOUND)
+                    .build();
+        }
         User saved = userRepository.save(user);
 
         return new UserDto.Builder()
@@ -52,13 +55,13 @@ public class UserService {
     public void deleteUser(Long id) {
         boolean exists = userRepository.existsById(id);
 
-        Optional.of(exists).ifPresentOrElse(a -> userRepository.deleteById(id),()->{
-            new GenericException.Builder()
+        if (!exists) {
+            throw new GenericException.Builder()
+                    .message("No user Delete was found")
                     .httpStatus(HttpStatus.NOT_FOUND)
-                    .message("no user for delete")
                     .build();
-        });
-
+        }
+        userRepository.deleteById(id);
     }
 
 }

@@ -24,8 +24,8 @@ public class ExperienceController {
                 .body(experienceService.createExperience(experience));
     }
 
-    @DeleteMapping("/delete")
-    public void deleteExperience(Long experienceId){
+    @DeleteMapping("/delete/{experienceId}")
+    public void deleteExperience(@PathVariable Long experienceId){
         experienceService.deleteExperience(experienceId);
     }
     @PutMapping("/update")

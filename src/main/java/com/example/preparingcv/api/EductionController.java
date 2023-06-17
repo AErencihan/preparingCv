@@ -24,8 +24,8 @@ public class EductionController {
                 .body(educationService.createEducation(education));
     }
 
-    @DeleteMapping("/delete")
-    public void deleteEducation(Long educationId) {
+    @DeleteMapping("/delete/{educationId}")
+    public void deleteEducation(@PathVariable Long educationId) {
         educationService.deleteEducation(educationId);
     }
 

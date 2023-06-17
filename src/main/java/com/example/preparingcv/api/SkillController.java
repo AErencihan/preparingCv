@@ -24,8 +24,8 @@ public class SkillController {
                 .body(skillService.createSkill(skill));
     }
 
-    @DeleteMapping("/delete")
-    public void deleteSkill(Long skillId){
+    @DeleteMapping("/delete/{skillId}")
+    public void deleteSkill(@PathVariable Long skillId){
         skillService.deleteSkill(skillId);
     }
 
