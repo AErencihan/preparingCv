@@ -23,7 +23,7 @@ public class UserService {
         return new UserDto.Builder()
                 .email(saveUser.getEmail())
                 .name(saveUser.getUserName())
-                .surname(saveUser.getUserName())
+                .surname(saveUser.getUserSurname())
                 .build();
     }
 
