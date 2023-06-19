@@ -59,7 +59,7 @@ public class UserAboutService {
                     .httpStatus(HttpStatus.NOT_FOUND)
                     .build();
         }
-        userRepository.deleteById(userAboutId);
+        aboutRepository.deleteById(userAboutId);
     }
 
 }
