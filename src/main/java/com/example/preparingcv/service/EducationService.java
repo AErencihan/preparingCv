@@ -9,8 +9,6 @@ import com.example.preparingcv.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class EducationService {
 
@@ -39,11 +37,16 @@ public class EducationService {
                 .build();
     }
 
-    public Education getEducation(Long educationId) {
-        return educationRepository.findById(educationId).orElseThrow(()-> new GenericException.Builder()
+    public EducationDto getEducation(Long educationId) {
+        Education education = educationRepository.findById(educationId).orElseThrow(() -> new GenericException.Builder()
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .message("no information about the user")
                 .build());
+
+        return new EducationDto.Builder()
+                .degree(education.getDegree())
+                .schoolName(education.getSchoolName())
+                .build();
     }
 
     public EducationDto updateEducation(EducationRequest education) {

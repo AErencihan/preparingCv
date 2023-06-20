@@ -43,11 +43,16 @@ public class UserAboutService {
                 .build();
     }
 
-    public UserAbout getUserAbout(Long userAboutId) {
-        return aboutRepository.findById(userAboutId).orElseThrow(() -> new GenericException.Builder()
+    public UserAboutDto getUserAbout(Long userAboutId) {
+        UserAbout userAbout = aboutRepository.findById(userAboutId).orElseThrow(() -> new GenericException.Builder()
                 .message("no information about the user")
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .build());
+
+        return new UserAboutDto.Builder()
+                .phoneNumber(userAbout.getPhoneNumber())
+                .address(userAbout.getAddress())
+                .build();
     }
 
     public void deleteUserAbout(Long userAboutId) {

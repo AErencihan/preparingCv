@@ -49,11 +49,16 @@ public class ExperienceService {
                 .build();
     }
 
-    public Experience getExperience(Long experienceId) {
-        return experienceRepository.findById(experienceId).orElseThrow(() -> new GenericException.Builder()
+    public ExperienceDto getExperience(Long experienceId) {
+        Experience experience = experienceRepository.findById(experienceId).orElseThrow(() -> new GenericException.Builder()
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .message("no information about the Experience")
                 .build());
+
+        return new ExperienceDto.Builder()
+                .companyName(experience.getCompanyName())
+                .position(experience.getPosition())
+                .build();
     }
 
     public ExperienceDto updateExperience(ExperienceRequest experience) {

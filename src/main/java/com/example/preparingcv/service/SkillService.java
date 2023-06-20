@@ -23,7 +23,7 @@ public class SkillService {
     }
 
     public SkillsDto createSkill(SkillRequest skill) {
-        var user = userRepository.findById(skill.getUserId()).orElseThrow(()-> new GenericException.Builder()
+        var user = userRepository.findById(skill.getUserId()).orElseThrow(() -> new GenericException.Builder()
                 .message("user not found")
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .build());
@@ -39,15 +39,19 @@ public class SkillService {
 
     }
 
-    public Skill getSkill(Long skillId){
-        return skillsRepository.findById(skillId).orElseThrow(()-> new GenericException.Builder()
+    public SkillsDto getSkill(Long skillId) {
+        Skill skill = skillsRepository.findById(skillId).orElseThrow(() -> new GenericException.Builder()
                 .message("skill Not found")
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .build());
+
+        return new SkillsDto.Builder()
+                .skillName(skill.getSkillName())
+                .build();
     }
 
     public SkillsDto updateSkill(SkillRequest skill) {
-        var user = userRepository.findById(skill.getUserId()).orElseThrow(()-> new GenericException.Builder()
+        var user = userRepository.findById(skill.getUserId()).orElseThrow(() -> new GenericException.Builder()
                 .message("user not found")
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .build());
@@ -66,7 +70,7 @@ public class SkillService {
     public void deleteSkill(Long skillId) {
         boolean exists = skillsRepository.existsById(skillId);
 
-        if (!exists){
+        if (!exists) {
             throw new GenericException.Builder()
                     .message("No user Delete was found")
                     .httpStatus(HttpStatus.NOT_FOUND)
