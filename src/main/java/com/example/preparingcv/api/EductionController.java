@@ -35,7 +35,7 @@ public class EductionController {
     }
 
     @GetMapping("/get/{educationId}")
-    public Education getEducation(@PathVariable Long educationId) {
+    public EducationDto getEducation(@PathVariable Long educationId) {
         return educationService.getEducation(educationId);
     }
 

@@ -34,7 +34,7 @@ public class ExperienceController {
     }
 
     @GetMapping("/get/{experienceId}")
-    public Experience getExperience(@PathVariable Long experienceId){
+    public ExperienceDto getExperience(@PathVariable Long experienceId){
         return experienceService.getExperience(experienceId);
     }
 

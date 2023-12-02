@@ -35,7 +35,7 @@ public class SkillController {
     }
 
     @GetMapping("/get/{skillId}")
-    public Skill getSkill(@PathVariable Long skillId){
+    public SkillsDto getSkill(@PathVariable Long skillId){
         return skillService.getSkill(skillId);
     }
 }

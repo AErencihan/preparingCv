@@ -36,7 +36,7 @@ public class UserAboutController {
     }
 
     @GetMapping("/get/{userAboutId}")
-    public UserAbout getUserAbout(@PathVariable Long userAboutId){
+    public UserAboutDto getUserAbout(@PathVariable Long userAboutId){
         return userAboutService.getUserAbout(userAboutId);
     }
 
