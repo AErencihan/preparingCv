@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/education")
 @RestController
 public class EductionController {
+
     private final EducationService educationService;
 
     public EductionController(EducationService educationService) {

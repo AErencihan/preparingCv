@@ -1,6 +1,5 @@
 package com.example.preparingcv.exception;
 
-import com.sun.istack.Builder;
 import org.springframework.http.HttpStatus;
 
 public class GenericException extends RuntimeException{
