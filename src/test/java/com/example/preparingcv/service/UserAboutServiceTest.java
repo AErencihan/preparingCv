@@ -23,15 +23,15 @@ class UserAboutServiceTest {
 
 
     @Test
-    void createOrUpdateUserAbout(){
-
+    void createOrUpdateUserAbout() {
+        Long userAboutId = 1L;
         User user = new User();
         user.setId(1L);
 
-        UserAboutRequest request = new UserAboutRequest(user.getId(), "01-01-2000", "05555555555",
+        UserAboutRequest request = new UserAboutRequest(userAboutId, "01-01-2000", "05555555555",
                 "istanbul", user.getId());
 
-        UserAbout savedUserAbout =  new UserAbout(user, request.getBirthDay(), request.getPhoneNumber(), request.getAddress());
+        UserAbout savedUserAbout = new UserAbout(user, request.getBirthDay(), request.getPhoneNumber(), request.getAddress());
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(userAboutRepository.save(any(UserAbout.class))).thenReturn(savedUserAbout);
@@ -39,8 +39,8 @@ class UserAboutServiceTest {
         UserAboutDto result = userAboutService.createOrUpdateUserAbout(request);
 
         assertNotNull(result);
-        assertNotEquals("eşleşmeyen doğum günü",request.getBirthDay(), result.getBirthDay());
-        assertNotEquals("eşleşmeyen telefon numarası ",request.getPhoneNumber(), result.getPhoneNumber());
+        assertNotEquals("eşleşmeyen doğum günü", request.getBirthDay(), result.getBirthDay());
+        assertNotEquals("eşleşmeyen telefon numarası ", request.getPhoneNumber(), result.getPhoneNumber());
         assertNotEquals("eşleşmeyen adres", request.getAddress(), result.getAddress());
 
         verify(userRepository, times(1)).findById(user.getId());
@@ -49,7 +49,7 @@ class UserAboutServiceTest {
     }
 
     @Test
-    void getUserAbout(){
+    void getUserAbout() {
         Long userAboutId = 1L;
         UserAbout userAbout = new UserAbout(null, "01-01-2000", "05555555555",
                 "istanbul");
@@ -59,12 +59,19 @@ class UserAboutServiceTest {
         UserAboutDto result = userAboutService.getUserAbout(userAboutId);
 
         assertNotNull(result);
-        assertNotEquals("eşleşmeyen doğum günü",userAbout.getBirthDay(), result.getBirthDay());
-        assertNotEquals("eşleşmeyen telefon numarası ",userAbout.getPhoneNumber(), result.getPhoneNumber());
+        assertNotEquals("eşleşmeyen doğum günü", userAbout.getBirthDay(), result.getBirthDay());
+        assertNotEquals("eşleşmeyen telefon numarası ", userAbout.getPhoneNumber(), result.getPhoneNumber());
         assertNotEquals("eşleşmeyen adres", userAbout.getAddress(), result.getAddress());
 
         verify(userAboutRepository, times(1)).findById(userAboutId);
+    }
 
+    @Test
+    void deleteUserAbout(){
+        Long userAboutId = 1L;
+        when(userAboutRepository.existsById(userAboutId)).thenReturn(true);
+        userAboutService.deleteUserAbout(userAboutId);
+        verify(userAboutRepository, times(1)).deleteById(userAboutId);
 
 
     }

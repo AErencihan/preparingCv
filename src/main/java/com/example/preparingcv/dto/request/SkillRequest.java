@@ -2,7 +2,6 @@ package com.example.preparingcv.dto.request;
 
 public class SkillRequest {
     private Long skillsId;
-
     private String skillName;
     private Long userId;
 
