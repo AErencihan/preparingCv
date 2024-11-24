@@ -7,8 +7,7 @@ import com.example.preparingcv.model.UserAbout;
 import com.example.preparingcv.repository.UserAboutRepository;
 import com.example.preparingcv.repository.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.configuration.IMockitoConfiguration;
+
 
 import java.util.Optional;
 
@@ -72,7 +71,6 @@ class UserAboutServiceTest {
         when(userAboutRepository.existsById(userAboutId)).thenReturn(true);
         userAboutService.deleteUserAbout(userAboutId);
         verify(userAboutRepository, times(1)).deleteById(userAboutId);
-
 
     }
 

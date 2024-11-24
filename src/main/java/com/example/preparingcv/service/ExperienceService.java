@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 public class ExperienceService {
 
@@ -22,6 +21,7 @@ public class ExperienceService {
         this.experienceRepository = experienceRepository;
         this.userRepository = userRepository;
     }
+
 
     public ExperienceDto createExperience(ExperienceRequest experience) {
 
@@ -59,6 +59,8 @@ public class ExperienceService {
         return new ExperienceDto.Builder()
                 .companyName(experience.getCompanyName())
                 .position(experience.getPosition())
+                .startDate(experience.getStartDate())
+                .endDate(experience.getEndDate())
                 .build();
     }
 

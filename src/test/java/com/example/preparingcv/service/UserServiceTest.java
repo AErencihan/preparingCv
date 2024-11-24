@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
 
 class UserServiceTest {
 
-    private final UserRepository userRepository= mock(UserRepository.class);
+    private final UserRepository userRepository = mock(UserRepository.class);
     private final UserService userService = new UserService(userRepository);
 
     @Test
@@ -32,13 +32,13 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals("aa", result.getName());
         assertEquals("aaa", result.getSurName());
-        assertEquals( "aa", result.getEmail());
+        assertEquals("aa", result.getEmail());
 
         verify(userRepository, times(1)).save(user);
     }
 
     @Test
-    void getUser(){
+    void getUser() {
         String userName = "aa";
 
         User user = new User();
@@ -57,7 +57,7 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser(){
+    void updateUser() {
         User user = new User();
         user.setId(1L);
         user.setUserName("aa");
@@ -80,16 +80,13 @@ class UserServiceTest {
     }
 
     @Test
-    void deleteUser(){
+    void deleteUser() {
         Long userId = 1L;
 
         when(userRepository.existsById(userId)).thenReturn(true);
         userService.deleteUser(userId);
         verify(userRepository, times(1)).deleteById(userId);
     }
-
-
-
 
 
 }

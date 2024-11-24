@@ -8,6 +8,15 @@ public class ExperienceRequest {
     private Long userId;
     private Long experienceId;
 
+    public ExperienceRequest(String companyName, String position, String startDate, String endDate, Long userId, Long experienceId) {
+        this.companyName = companyName;
+        this.position = position;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.userId = userId;
+        this.experienceId = experienceId;
+    }
+
     public String getCompanyName() {
         return companyName;
     }

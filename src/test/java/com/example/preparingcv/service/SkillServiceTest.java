@@ -24,7 +24,7 @@ class SkillServiceTest {
 
 
     @Test
-    void createSkill(){
+    void createSkill() {
         Long userId = 1L;
         User user = new User();
         user.setId(1L);
@@ -46,7 +46,7 @@ class SkillServiceTest {
     }
 
     @Test
-    void getSkill(){
+    void getSkill() {
         Long skillId = 1L;
         Skill skill = new Skill("java", null);
 
@@ -62,7 +62,7 @@ class SkillServiceTest {
     }
 
     @Test
-    void updateSkill(){
+    void updateSkill() {
         Long userId = 1L;
 
         SkillRequest request = new SkillRequest(null, "java", userId);
@@ -78,7 +78,7 @@ class SkillServiceTest {
         SkillsDto result = skillService.updateSkill(request);
 
         assertNotNull(result);
-        assertEquals("java", result.getSkillName());
+        assertEquals(request.getSkillName(), result.getSkillName());
 
         verify(userRepository, times(1)).findById(userId);
         verify(skillsRepository, times(1)).save(any(Skill.class));
@@ -86,6 +86,14 @@ class SkillServiceTest {
 
     }
 
+    @Test
+    void deleteSkill() {
+        Long skillId = 1L;
+        when(skillsRepository.existsById(skillId)).thenReturn(true);
+        skillService.deleteSkill(skillId);
+        verify(skillsRepository, times(1)).deleteById(skillId);
+
+    }
 
 
 }
