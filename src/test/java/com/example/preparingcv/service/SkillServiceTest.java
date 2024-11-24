@@ -39,7 +39,7 @@ class SkillServiceTest {
         SkillsDto result = skillService.createSkill(request);
 
         assertNotNull(result);
-        assertNotEquals("eşleşmeyen skill adı", "java", result.getSkillName());
+        assertEquals("java", result.getSkillName());
 
         verify(userRepository, times(1)).findById(user.getId());
         verify(skillsRepository, times(1)).save(any(Skill.class));
@@ -55,7 +55,7 @@ class SkillServiceTest {
         SkillsDto result = skillService.getSkill(skillId);
 
         assertNotNull(result);
-        assertNotEquals("eşleşmeyen skill adı", "java", result.getSkillName());
+        assertEquals("java", result.getSkillName());
 
         verify(skillsRepository, times(1)).findById(skillId);
 
@@ -78,7 +78,7 @@ class SkillServiceTest {
         SkillsDto result = skillService.updateSkill(request);
 
         assertNotNull(result);
-        assertNotEquals("eşleşmeyen skill adı", "java", result.getSkillName());
+        assertEquals("java", result.getSkillName());
 
         verify(userRepository, times(1)).findById(userId);
         verify(skillsRepository, times(1)).save(any(Skill.class));

@@ -39,9 +39,9 @@ class UserAboutServiceTest {
         UserAboutDto result = userAboutService.createOrUpdateUserAbout(request);
 
         assertNotNull(result);
-        assertNotEquals("eşleşmeyen doğum günü", request.getBirthDay(), result.getBirthDay());
-        assertNotEquals("eşleşmeyen telefon numarası ", request.getPhoneNumber(), result.getPhoneNumber());
-        assertNotEquals("eşleşmeyen adres", request.getAddress(), result.getAddress());
+        assertEquals(request.getBirthDay(), result.getBirthDay());
+        assertEquals(request.getPhoneNumber(), result.getPhoneNumber());
+        assertEquals(request.getAddress(), result.getAddress());
 
         verify(userRepository, times(1)).findById(user.getId());
         verify(userAboutRepository, times(1)).save(any(UserAbout.class));
@@ -59,9 +59,9 @@ class UserAboutServiceTest {
         UserAboutDto result = userAboutService.getUserAbout(userAboutId);
 
         assertNotNull(result);
-        assertNotEquals("eşleşmeyen doğum günü", userAbout.getBirthDay(), result.getBirthDay());
-        assertNotEquals("eşleşmeyen telefon numarası ", userAbout.getPhoneNumber(), result.getPhoneNumber());
-        assertNotEquals("eşleşmeyen adres", userAbout.getAddress(), result.getAddress());
+        assertEquals(userAbout.getBirthDay(), result.getBirthDay());
+        assertEquals(userAbout.getPhoneNumber(), result.getPhoneNumber());
+        assertEquals(userAbout.getAddress(), result.getAddress());
 
         verify(userAboutRepository, times(1)).findById(userAboutId);
     }

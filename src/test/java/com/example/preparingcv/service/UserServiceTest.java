@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.util.AssertionErrors.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertNotNull;
 
 class UserServiceTest {
 
@@ -29,10 +29,10 @@ class UserServiceTest {
 
         UserDto result = userService.createUser(user);
 
-        assertNotNull("result is not null", result);
-        assertEquals("kullanıcı adı eşleşmiyor", "aa", result.getName());
-        assertEquals("kullanıcı soyadı eşleşmiyor", "aaa", result.getSurName());
-        assertEquals("kullanıcı emaili eşleşmiyor", "aa", result.getEmail());
+        assertNotNull(result);
+        assertEquals("aa", result.getName());
+        assertEquals("aaa", result.getSurName());
+        assertEquals( "aa", result.getEmail());
 
         verify(userRepository, times(1)).save(user);
     }
@@ -49,9 +49,9 @@ class UserServiceTest {
 
         UserDto result = userService.getUser(userName);
 
-        assertNotNull("result is not null", result);
-        assertEquals("kullanıcı adı eşleşmiyor", "aa", result.getName());
-        assertEquals("kullanıcı soyadı eşleşmiyor", "cihan", result.getSurName());
+        assertNotNull(result);
+        assertEquals("aa", result.getName());
+        assertEquals("cihan", result.getSurName());
 
         verify(userRepository, times(1)).findByUserName(userName);
     }
@@ -69,10 +69,10 @@ class UserServiceTest {
 
         UserDto result = userService.updateUser(user);
 
-        assertNotNull("result is not null", result);
-        assertEquals("kullanıcı adı eşleşmiyor", "aa", result.getName());
-        assertEquals("kullanıcı soyadı eşleşmiyor", "aaa", result.getSurName());
-        assertEquals("kullanıcı emaili eşleşmiyor", "aa", result.getEmail());
+        assertNotNull(result);
+        assertEquals("aa", result.getName());
+        assertEquals("aaa", result.getSurName());
+        assertEquals("aa", result.getEmail());
 
         verify(userRepository, times(1)).findById(user.getId());
         verify(userRepository, times(1)).save(user);
