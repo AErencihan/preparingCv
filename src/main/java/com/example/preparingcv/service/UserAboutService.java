@@ -52,6 +52,7 @@ public class UserAboutService {
         return new UserAboutDto.Builder()
                 .phoneNumber(userAbout.getPhoneNumber())
                 .address(userAbout.getAddress())
+                .birthDay(userAbout.getBirthDay())
                 .build();
     }
 

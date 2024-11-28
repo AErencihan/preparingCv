@@ -1,6 +1,5 @@
 package com.example.preparingcv.integration;
 
-
 import com.example.preparingcv.dto.UserDto;
 import com.example.preparingcv.model.User;
 import com.example.preparingcv.repository.UserRepository;
@@ -11,14 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-public class UserIntegrationTest {
+class UserServiceIntegrationTest {
 
     @Autowired
     private UserService userService;
