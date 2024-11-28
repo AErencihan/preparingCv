@@ -38,6 +38,7 @@ public class UserService {
         return new UserDto.Builder()
                 .name(user.getUserName())
                 .surname(user.getUserSurname())
+                .email(user.getEmail())
                 .build();
     }
 
