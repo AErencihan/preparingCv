@@ -4,6 +4,7 @@ import com.example.preparingcv.dto.ExperienceDto;
 import com.example.preparingcv.dto.request.ExperienceRequest;
 import com.example.preparingcv.exception.GenericException;
 import com.example.preparingcv.model.Experience;
+import com.example.preparingcv.model.User;
 import com.example.preparingcv.repository.ExperienceRepository;
 import com.example.preparingcv.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -25,17 +26,14 @@ public class ExperienceService {
 
     public ExperienceDto createExperience(ExperienceRequest experience) {
 
-        userRepository.findById(experience.getUserId())
+        User user = userRepository.findById(experience.getUserId())
                 .orElseThrow(() -> new GenericException.Builder()
                         .httpStatus(HttpStatus.NOT_FOUND)
                         .message("No User for create Experience")
                         .build());
 
         Experience saved = experienceRepository.save(new Experience(
-                userRepository.findById(experience.getUserId()).orElseThrow(() -> new GenericException.Builder()
-                        .httpStatus(HttpStatus.NOT_FOUND)
-                        .message("No User for create Experience")
-                        .build()),
+                user,
                 experience.getCompanyName(),
                 experience.getPosition(),
                 experience.getStartDate(),

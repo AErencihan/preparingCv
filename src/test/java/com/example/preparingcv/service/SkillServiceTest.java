@@ -55,7 +55,7 @@ class SkillServiceTest {
         SkillsDto result = skillService.getSkill(skillId);
 
         assertNotNull(result);
-        assertEquals("java", result.getSkillName());
+        assertEquals(skill.getSkillName(), result.getSkillName());
 
         verify(skillsRepository, times(1)).findById(skillId);
 

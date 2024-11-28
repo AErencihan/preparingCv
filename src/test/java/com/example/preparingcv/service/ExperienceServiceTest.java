@@ -33,7 +33,7 @@ class ExperienceServiceTest {
         Experience experience = new Experience(user, "apple", "developer", "01.01.2000",
                 "present");
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(experienceRepository.save(any(Experience.class))).thenReturn(experience);
 
         ExperienceDto result = experienceService.createExperience(request);
@@ -43,6 +43,9 @@ class ExperienceServiceTest {
         assertEquals(request.getPosition(), result.getPosition());
         assertEquals(request.getStartDate(), result.getStartDate());
         assertEquals(request.getEndDate(), result.getEndDate());
+
+        verify(userRepository, times(1)).findById(user.getId());
+        verify(experienceRepository, times(1)).save(any(Experience.class));
 
     }
 
@@ -96,6 +99,15 @@ class ExperienceServiceTest {
 
     }
 
+    @Test
+    void deleteExperience(){
+        Long experienceId = 1L;
+
+        when(experienceRepository.existsById(experienceId)).thenReturn(true);
+        experienceService.deleteExperience(experienceId);
+        verify(experienceRepository, times(1)).deleteById(experienceId);
+
+    }
 
 
 }

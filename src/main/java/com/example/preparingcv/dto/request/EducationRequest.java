@@ -6,6 +6,13 @@ public class EducationRequest {
     private Long userId;
     private Long educationId;
 
+    public EducationRequest(String schoolName, String degree, Long userId, Long educationId) {
+        this.schoolName = schoolName;
+        this.degree = degree;
+        this.userId = userId;
+        this.educationId = educationId;
+    }
+
     public String getSchoolName() {
         return schoolName;
     }
