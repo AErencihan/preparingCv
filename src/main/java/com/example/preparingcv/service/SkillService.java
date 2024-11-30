@@ -6,12 +6,9 @@ import com.example.preparingcv.exception.GenericException;
 import com.example.preparingcv.model.Skill;
 import com.example.preparingcv.repository.SkillsRepository;
 import com.example.preparingcv.repository.UserRepository;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Optional;
 
 @Service
 public class SkillService {

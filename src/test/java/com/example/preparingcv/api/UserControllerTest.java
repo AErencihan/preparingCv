@@ -1,4 +1,4 @@
-package com.example.preparingcv.integration;
+package com.example.preparingcv.api;
 
 import com.example.preparingcv.dto.UserDto;
 import com.example.preparingcv.model.User;
@@ -10,14 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-class UserServiceIntegrationTest {
+class UserControllerTest {
 
     @Autowired
     private UserService userService;
@@ -32,7 +32,7 @@ class UserServiceIntegrationTest {
 
 
     @Test
-    void createUSer(){
+    void createUSer() {
         User user = new User();
         user.setUserName("aa");
         user.setUserSurname("aaa");
@@ -45,10 +45,19 @@ class UserServiceIntegrationTest {
         assertEquals("aaa", createdUser.getSurName());
         assertEquals("aa", createdUser.getEmail());
 
+        List<User> savedUser = userRepository.findAll();
+        assertEquals(1, savedUser.size());
+        User savedUsers = savedUser.get(0);
+
+        assertEquals(createdUser.getName(), savedUsers.getUserName());
+        assertEquals(createdUser.getSurName(), savedUsers.getUserSurname());
+        assertEquals(createdUser.getEmail(), savedUsers.getEmail());
+
+
     }
 
     @Test
-    void deleteUser(){
+    void deleteUser() {
         User user = new User();
         user.setUserName("aa");
         user.setUserSurname("aaa");
@@ -65,7 +74,7 @@ class UserServiceIntegrationTest {
 
 
     @Test
-    void getUser(){
+    void getUser() {
         User user = new User();
         user.setUserName("aa");
         user.setUserSurname("aaa");
