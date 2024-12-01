@@ -23,6 +23,7 @@ public class UserService {
     public UserDto createUser(User user) {
         User saveUser = userRepository.save(user);
         return new UserDto.Builder()
+                .id(saveUser.getId())
                 .email(saveUser.getEmail())
                 .name(saveUser.getUserName())
                 .surname(saveUser.getUserSurname())

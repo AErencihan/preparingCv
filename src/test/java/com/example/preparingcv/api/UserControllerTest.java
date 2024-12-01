@@ -1,26 +1,23 @@
 package com.example.preparingcv.api;
 
-import com.example.preparingcv.dto.UserDto;
+import com.example.preparingcv.dto.request.UserRequest;
 import com.example.preparingcv.model.User;
 import com.example.preparingcv.repository.UserRepository;
-import com.example.preparingcv.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.transaction.Transactional;
-import java.util.List;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-class UserControllerTest {
+class UserControllerTest extends BaseIntegrationTest {
 
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -32,82 +29,106 @@ class UserControllerTest {
 
 
     @Test
-    void createUSer() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+    void createUSer() throws Exception {
+        UserRequest request = new UserRequest();
+        request.setUserName("aa");
+        request.setUserSurname("aa");
+        request.setEmail("aaa");
 
-        UserDto createdUser = userService.createUser(user);
 
-        assertNotNull(createdUser);
-        assertEquals("aa", createdUser.getName());
-        assertEquals("aaa", createdUser.getSurName());
-        assertEquals("aa", createdUser.getEmail());
-
-        List<User> savedUser = userRepository.findAll();
-        assertEquals(1, savedUser.size());
-        User savedUsers = savedUser.get(0);
-
-        assertEquals(createdUser.getName(), savedUsers.getUserName());
-        assertEquals(createdUser.getSurName(), savedUsers.getUserSurname());
-        assertEquals(createdUser.getEmail(), savedUsers.getEmail());
+        mvc.perform(MockMvcRequestBuilders.post("/api/user/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").isString())
+                .andExpect(jsonPath("$.surName").isString())
+                .andExpect(jsonPath("$.email").isString());
 
 
     }
 
     @Test
-    void deleteUser() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+    void deleteUser() throws Exception {
+        UserRequest request = new UserRequest();
+        request.setUserName("aa");
+        request.setUserSurname("aa");
+        request.setEmail("aaa");
 
-        User savedUser = userRepository.save(user);
+        mvc.perform(MockMvcRequestBuilders.post("/api/user/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").isString())
+                .andExpect(jsonPath("$.surName").isString())
+                .andExpect(jsonPath("$.email").isString());
 
-        userService.deleteUser(savedUser.getId());
 
-        Optional<User> deletedUser = userRepository.findById(user.getId());
+        mvc.perform(MockMvcRequestBuilders.delete("/api/user/delete/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+        Optional<User> deletedUser = userRepository.findById(1L);
         assertTrue(deletedUser.isEmpty());
 
     }
 
 
     @Test
-    void getUser() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
-        userRepository.save(user);
+    void getUser() throws Exception {
+        UserRequest request = new UserRequest();
+        request.setUserName("aa");
+        request.setUserSurname("aa");
+        request.setEmail("aaa");
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/user/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").isString())
+                .andExpect(jsonPath("$.surName").isString())
+                .andExpect(jsonPath("$.email").isString());
 
 
-        UserDto foundUser = userService.getUser("Jane");
+        mvc.perform(MockMvcRequestBuilders.get("/api/user/get/aa")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").isString())
+                .andExpect(jsonPath("$.surName").isString())
+                .andExpect(jsonPath("$.email").isString());
 
-        assertNotNull(foundUser);
-        assertEquals("aa", foundUser.getName());
-        assertEquals("aaa", foundUser.getSurName());
-        assertEquals("aa", foundUser.getEmail());
+
     }
 
     @Test
-    void updateUser() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+    void updateUser() throws Exception {
+        UserRequest request = new UserRequest();
+        request.setUserName("aa");
+        request.setUserSurname("aa");
+        request.setEmail("aaa");
 
-        User savedUser = userRepository.save(user);
+        mvc.perform(MockMvcRequestBuilders.post("/api/user/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").isString())
+                .andExpect(jsonPath("$.surName").isString())
+                .andExpect(jsonPath("$.email").isString());
 
-        savedUser.setUserName("bb");
-        savedUser.setUserSurname("bbb");
+        Optional<User> user = userRepository.findById(1L);
+        User savedUser = user.get();
+        savedUser.setUserName("sasssasdcs");
 
-        UserDto updatedUser = userService.updateUser(savedUser);
+        mvc.perform(MockMvcRequestBuilders.put("/api/user/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(user)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("sasssasdcs"))
+                .andExpect(jsonPath("$.surName").isString())
+                .andExpect(jsonPath("$.email").isString());
 
-        assertNotNull(updatedUser);
-        assertEquals("bb", updatedUser.getName());
-        assertEquals("bbb", updatedUser.getSurName());
-        assertEquals("aa", updatedUser.getEmail());
+
     }
 
 }

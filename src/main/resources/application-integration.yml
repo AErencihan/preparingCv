@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+    properties:
+      hibernate:
+        id:
+          new_generator_mappings: false
+        dialect: org.hibernate.dialect.H2Dialect
+    database-platform: org.h2.Driver
+    defer-datasource-initialization: true
+    generate-ddl: true

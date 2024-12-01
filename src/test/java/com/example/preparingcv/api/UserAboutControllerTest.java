@@ -1,34 +1,32 @@
 package com.example.preparingcv.api;
 
-import com.example.preparingcv.dto.UserAboutDto;
+import com.example.preparingcv.dto.UserDto;
 import com.example.preparingcv.dto.request.UserAboutRequest;
+import com.example.preparingcv.dto.request.UserRequest;
 import com.example.preparingcv.model.User;
 import com.example.preparingcv.model.UserAbout;
 import com.example.preparingcv.repository.UserAboutRepository;
 import com.example.preparingcv.repository.UserRepository;
-import com.example.preparingcv.service.UserAboutService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.transaction.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@Transactional
-class UserAboutControllerTest {
 
+class UserAboutControllerTest extends BaseIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserAboutService userAboutService;
 
     @Autowired
     private UserAboutRepository userAboutRepository;
@@ -36,91 +34,92 @@ class UserAboutControllerTest {
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
-        ;
         userAboutRepository.deleteAll();
     }
 
 
     @Test
-    void createUserAbout() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+    void createUserAbout() throws Exception {
+        UserRequest request = new UserRequest();
+        request.setUserName("aa");
+        request.setUserSurname("aa");
+        request.setEmail("aaa");
 
-        User savedUser = userRepository.save(user);
-
-        UserAboutRequest request = new UserAboutRequest(null, "01.01.2000", "05555555555",
-                "Istanbul", savedUser.getId());
-
-
-        UserAboutDto result = userAboutService.createOrUpdateUserAbout(request);
-
-        assertNotNull(result);
-        assertEquals(request.getBirthDay(), result.getBirthDay());
-        assertEquals(request.getPhoneNumber(), result.getPhoneNumber());
-        assertEquals(request.getAddress(), result.getAddress());
-
-        List<UserAbout> savedUserAbouts = userAboutRepository.findAll();
-        assertEquals(1, savedUserAbouts.size());
-        UserAbout savedAbout = savedUserAbouts.get(0);
-
-        assertEquals(request.getBirthDay(), savedAbout.getBirthDay());
-        assertEquals(request.getPhoneNumber(), savedAbout.getPhoneNumber());
-        assertEquals(request.getAddress(), savedAbout.getAddress());
-        assertEquals(savedUser, savedAbout.getUser());
+        MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/api/user/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value(request.getUserName()))
+                .andExpect(jsonPath("$.surName").value(request.getUserSurname()))
+                .andExpect(jsonPath("$.email").value(request.getEmail()))
+                .andReturn();
 
 
-    }
+        String responseBody = result.getResponse().getContentAsString();
+        UserDto response = mapper.readValue(responseBody, UserDto.class);
 
-    @Test
-    void getUserAbout() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+        UserAboutRequest aboutRequest = new UserAboutRequest(null, "01.01.2000", "05555555555",
+                "Istanbul", response.getId());
 
-        User savedUser = userRepository.save(user);
 
-        UserAbout userAbout = new UserAbout();
-        userAbout.setUser(savedUser);
-        userAbout.setBirthDay("01.01.2000");
-        userAbout.setPhoneNumber("05555555555");
-        userAbout.setAddress("Istanbul");
-
-        UserAbout savedUserAbout = userAboutRepository.save(userAbout);
-
-        UserAboutDto result = userAboutService.getUserAbout(savedUserAbout.getUserAboutId());
-
-        assertNotNull(result);
-        assertEquals(savedUserAbout.getBirthDay(), result.getBirthDay());
-        assertEquals(savedUserAbout.getPhoneNumber(), result.getPhoneNumber());
-        assertEquals(savedUserAbout.getAddress(), result.getAddress());
+        mvc.perform(MockMvcRequestBuilders.post("/api/userAbout/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(aboutRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.birthDay").value(aboutRequest.getBirthDay()))
+                .andExpect(jsonPath("$.phoneNumber").value(aboutRequest.getPhoneNumber()))
+                .andExpect(jsonPath("$.address").value(aboutRequest.getAddress()));
 
     }
 
     @Test
-    void deleteUserAbout() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+    void getUserAbout() throws Exception {
+        Long userId = createUser();
 
-        User savedUser = userRepository.save(user);
+        UserAboutRequest aboutRequest = new UserAboutRequest(null, "01.01.2000", "05555555555",
+                "Istanbul", userId);
 
-        UserAbout userAbout = new UserAbout();
-        userAbout.setUser(savedUser);
-        userAbout.setBirthDay("01.01.2000");
-        userAbout.setPhoneNumber("05555555555");
-        userAbout.setAddress("Istanbul");
+        mvc.perform(MockMvcRequestBuilders.post("/api/userAbout/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(aboutRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.birthDay").value(aboutRequest.getBirthDay()))
+                .andExpect(jsonPath("$.phoneNumber").value(aboutRequest.getPhoneNumber()))
+                .andExpect(jsonPath("$.address").value(aboutRequest.getAddress()));
 
-        UserAbout savedUserAbout = userAboutRepository.save(userAbout);
 
-        userAboutService.deleteUserAbout(savedUserAbout.getUserAboutId());
+        mvc.perform(MockMvcRequestBuilders.get("/api/userAbout/get/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(aboutRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.birthDay").value(aboutRequest.getBirthDay()))
+                .andExpect(jsonPath("$.phoneNumber").value(aboutRequest.getPhoneNumber()))
+                .andExpect(jsonPath("$.address").value(aboutRequest.getAddress()));
 
-        Optional<UserAbout> deleteUserAbout = userAboutRepository.findById(savedUserAbout.getUserAboutId());
+    }
 
-        assertTrue(deleteUserAbout.isEmpty());
+    @Test
+    void deleteUserAbout() throws Exception {
+        Long userId = createUser();
+        UserAboutRequest aboutRequest = new UserAboutRequest(null, "01.01.2000", "05555555555",
+                "Istanbul", userId);
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/userAbout/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(aboutRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.birthDay").value(aboutRequest.getBirthDay()))
+                .andExpect(jsonPath("$.phoneNumber").value(aboutRequest.getPhoneNumber()))
+                .andExpect(jsonPath("$.address").value(aboutRequest.getAddress()));
+
+
+        mvc.perform(MockMvcRequestBuilders.delete("/api/userAbout/delete/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(userId)))
+                .andExpect(status().isOk());
+
+        Optional<UserAbout> deletedUser = userAboutRepository.findById(userId);
+        assertTrue(deletedUser.isEmpty());
 
     }
 
