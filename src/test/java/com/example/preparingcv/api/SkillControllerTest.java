@@ -8,25 +8,25 @@ import com.example.preparingcv.repository.SkillsRepository;
 import com.example.preparingcv.repository.UserRepository;
 import com.example.preparingcv.service.SkillService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.checkerframework.checker.nullness.Opt;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
 
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.put;
+import java.util.Optional;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@Transactional
-@AutoConfigureMockMvc
-class SkillControllerTest {
+
+class SkillControllerTest extends BaseIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -34,77 +34,79 @@ class SkillControllerTest {
     @Autowired
     private SkillsRepository skillsRepository;
 
-    @Autowired
-    private SkillService skillService;
+
+    @BeforeEach
+    void setUp() {
+        userRepository.deleteAll();
+        skillsRepository.deleteAll();
+    }
 
 
     @Test
-    void createSkill() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+    void createSkill() throws Exception {
+        Long userId = createUser();
 
-        User savedUser = userRepository.save(user);
+        SkillRequest skillRequest = new SkillRequest(null, "java", userId);
 
-        SkillRequest request = new SkillRequest(null, "java", savedUser.getId());
-        SkillsDto result = skillService.createSkill(request);
+        mvc.perform(MockMvcRequestBuilders.post("/api/skill/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(skillRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.skillName").value(skillRequest.getSkillName()))
+                .andReturn();
 
-        assertNotNull(result);
-        assertEquals(request.getSkillName(), result.getSkillName());
 
-        List<Skill> savedSkills = skillsRepository.findAll();
-        assertEquals(1, savedSkills.size());
-        Skill savedSkill = savedSkills.get(0);
-
-        assertEquals(request.getSkillName(), savedSkill.getSkillName());
     }
 
     @Test
-    void getSkill() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+    void getSkill() throws Exception {
+        Long userId = createUser();
 
-        User savedUser = userRepository.save(user);
+        SkillRequest skillRequest = new SkillRequest(null, "java", userId);
 
-        Skill skill = new Skill();
-        skill.setUser(savedUser);
-        skill.setSkillName("java");
+        mvc.perform(MockMvcRequestBuilders.post("/api/skill/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(skillRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.skillName").value(skillRequest.getSkillName()))
+                .andReturn();
 
-        Skill savedSkill = skillsRepository.save(skill);
+        mvc.perform(MockMvcRequestBuilders.get("/api/skill/get/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(skillRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.skillName").value(skillRequest.getSkillName()))
+                .andReturn();
 
-        SkillsDto result = skillService.getSkill(savedSkill.getSkillsId());
 
-        assertNotNull(result);
-        assertEquals(savedSkill.getSkillName(), result.getSkillName());
     }
 
     @Test
-    void updateSkill() {
-        User user = new User();
-        user.setUserName("aa");
-        user.setUserSurname("aaa");
-        user.setEmail("aa");
+    void updateSkill() throws Exception {
+        Long userId = createUser();
 
-        User savedUser = userRepository.save(user);
+        SkillRequest skillRequest = new SkillRequest(null, "java", userId);
 
-        Skill skill = new Skill();
-        skill.setUser(savedUser);
-        skill.setSkillName("java");
+        mvc.perform(MockMvcRequestBuilders.post("/api/skill/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(skillRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.skillName").value(skillRequest.getSkillName()))
+                .andReturn();
 
-        Skill savedSkill = skillsRepository.save(skill);
+        Optional<Skill> skill = skillsRepository.findById(userId);
+        Skill savedSkill = skill.get();
 
-        SkillRequest request = new SkillRequest();
-        request.setSkillsId(savedSkill.getSkillsId());
-        request.setSkillName("spring");
-        request.setUserId(savedUser.getId());
+        SkillRequest skillRequest1 = new SkillRequest(savedSkill.getSkillsId(), "spring", userId);
 
-        SkillsDto result = skillService.updateSkill(request);
 
-        assertNotNull(result);
-        assertEquals(request.getSkillName(), result.getSkillName());
+        mvc.perform(MockMvcRequestBuilders.put("/api/skill/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(skillRequest1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.skillName").value("spring"))
+                .andReturn();
+
 
     }
 

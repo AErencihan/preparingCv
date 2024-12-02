@@ -40,26 +40,10 @@ class UserAboutControllerTest extends BaseIntegrationTest {
 
     @Test
     void createUserAbout() throws Exception {
-        UserRequest request = new UserRequest();
-        request.setUserName("aa");
-        request.setUserSurname("aa");
-        request.setEmail("aaa");
-
-        MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/api/user/save")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value(request.getUserName()))
-                .andExpect(jsonPath("$.surName").value(request.getUserSurname()))
-                .andExpect(jsonPath("$.email").value(request.getEmail()))
-                .andReturn();
-
-
-        String responseBody = result.getResponse().getContentAsString();
-        UserDto response = mapper.readValue(responseBody, UserDto.class);
+        Long userId = createUser();
 
         UserAboutRequest aboutRequest = new UserAboutRequest(null, "01.01.2000", "05555555555",
-                "Istanbul", response.getId());
+                "Istanbul", userId);
 
 
         mvc.perform(MockMvcRequestBuilders.post("/api/userAbout/save")

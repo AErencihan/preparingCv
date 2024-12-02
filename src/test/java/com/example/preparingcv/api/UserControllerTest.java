@@ -122,7 +122,7 @@ class UserControllerTest extends BaseIntegrationTest {
 
         mvc.perform(MockMvcRequestBuilders.put("/api/user/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(user)))
+                        .content(mapper.writeValueAsString(savedUser)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("sasssasdcs"))
                 .andExpect(jsonPath("$.surName").isString())
