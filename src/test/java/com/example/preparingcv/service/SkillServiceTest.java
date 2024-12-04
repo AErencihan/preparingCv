@@ -7,8 +7,6 @@ import com.example.preparingcv.model.User;
 import com.example.preparingcv.repository.SkillsRepository;
 import com.example.preparingcv.repository.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import java.util.Optional;
 

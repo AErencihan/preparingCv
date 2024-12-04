@@ -1,27 +1,20 @@
 package com.example.preparingcv.api;
 
-import com.example.preparingcv.dto.SkillsDto;
 import com.example.preparingcv.dto.request.SkillRequest;
 import com.example.preparingcv.model.Skill;
-import com.example.preparingcv.model.User;
 import com.example.preparingcv.repository.SkillsRepository;
 import com.example.preparingcv.repository.UserRepository;
-import com.example.preparingcv.service.SkillService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import javax.transaction.Transactional;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,7 +100,29 @@ class SkillControllerTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.skillName").value("spring"))
                 .andReturn();
 
+    }
 
+    @Test
+    void deleteSkill() throws Exception {
+        Long userId = createUser();
+
+        SkillRequest request = new SkillRequest(null, "java", userId);
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/skill/save/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.skillName").value(request.getSkillName()))
+                .andReturn();
+
+        mvc.perform(MockMvcRequestBuilders.delete("/api/skill/delete/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Optional<Skill> deleteSkill = skillsRepository.findById(request.getUserId());
+        assertTrue(deleteSkill.isEmpty());
     }
 
 
