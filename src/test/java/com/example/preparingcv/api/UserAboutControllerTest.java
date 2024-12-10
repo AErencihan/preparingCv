@@ -1,18 +1,13 @@
 package com.example.preparingcv.api;
 
-import com.example.preparingcv.dto.UserDto;
 import com.example.preparingcv.dto.request.UserAboutRequest;
-import com.example.preparingcv.dto.request.UserRequest;
-import com.example.preparingcv.model.User;
 import com.example.preparingcv.model.UserAbout;
 import com.example.preparingcv.repository.UserAboutRepository;
 import com.example.preparingcv.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 

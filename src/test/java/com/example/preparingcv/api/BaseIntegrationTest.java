@@ -3,9 +3,7 @@ package com.example.preparingcv.api;
 
 import com.example.preparingcv.dto.UserDto;
 import com.example.preparingcv.dto.request.UserRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
